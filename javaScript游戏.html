@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>JavaScript 3/5/7游戏</h1>
+
+<p id="fristData"></p>
+<p id="secondData"></p>
+<p id="thirdData"></p>
+
+<button onclick="initPoker()">重置</button>
+<button onclick="myFunction()">开始游戏</button>
+
+<p id="showData"></p>
+<p id="showIdea"></p>
+
+<script>
+
+var a;  //数据      
+var showMessage;    //显示信息
+var frist = [1, 2, 3];  //第一行数据
+var second = [4, 5, 6, 7,8]; //第二行数据
+var third = [9, 10, 11, 12,13,14,15];  //第三行数据
+var loser;  //输家
+
+var idea = "设计游戏思路重点：1.安排两个玩家，拿牙签（要考虑那个玩家先拿）；2.在任意行拿任意根牙签，但不能跨行(即随机选择行，随机取牙签根数（两人同时操作同一行）)；";
+
+
+initPoker();
+
+//开始游戏
+//游戏规则：随机选择行，随机取牙签根数（两人同时操作同一行）
+function myFunction() {
+    initPoker();
+    takePoker();
+}
+
+//初始化界面
+function initPoker(){ 
+
+    a= [[1, 2, 3],[4, 5, 6, 7,8],[9, 10, 11, 12,13,14,15]];
+
+    document.getElementById("fristData").innerHTML = frist;
+    document.getElementById("secondData").innerHTML = second;
+    document.getElementById("thirdData").innerHTML = third;
+
+    document.getElementById("showData").innerHTML = "";
+    document.getElementById("showIdea").innerHTML = "";
+
+}
+
+//拿牙签
+function takePoker(){
+    var selectRow = Math.floor(Math.random() * 3) + 1;
+    if (a[selectRow-1].length == 0)
+    {
+        alert("所提供的源数据异常");
+        return;
+    }
+
+    //谁先拿牙签
+    var takePoker = Math.floor(Math.random() * 2) + 1;
+    while(a[selectRow-1].length >0){
+        
+        switch(takePoker){
+            case 1:
+                console.log("Apoker 先拿");
+                userATake(selectRow);
+                userBTake(selectRow);
+                break;
+            case 2:
+                console.log("Bpoker 先拿");
+                userBTake(selectRow);
+                userATake(selectRow);
+                break;
+        }
+        
+    }
+
+}
+//玩家A拿牙签
+function userATake(selectRow){
+	loser = "Apoker";
+    GetPokerCaculate(selectRow,loser);
+}
+
+//玩家B拿牙签
+function userBTake(selectRow){
+	loser = "Bpoker";
+    GetPokerCaculate(selectRow,loser);
+}
+
+//拿牙签计算
+function GetPokerCaculate(selectRow,poker){
+    var arry = a[selectRow-1];
+    if (arry.length == 0)
+    {
+        return;
+    }
+    var selectCount = Math.floor(Math.random() * arry.length) + 1;
+    console.log("selectRow = "+selectRow+" ;poker = "+poker+" ; selectCount = "+selectCount);
+    arry.splice(0, selectCount);
+    if(arry.length == 0){
+
+        var content = "";
+        console.log("poker = "+poker);
+        switch(poker){
+            case "Apoker":
+                content = "A 输了";
+                break;
+            case "Bpoker":
+                content = "B 输了";
+                break;
+        }
+
+        showMessage(content);
+    }
+}
+
+
+//显示结果
+function showMessage(msg){
+    document.getElementById("showData").innerHTML = msg;
+    document.getElementById("showIdea").innerHTML = idea;
+}
+
+</script>
+
+</body>
+</html>
